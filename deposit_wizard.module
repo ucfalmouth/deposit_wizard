@@ -1,0 +1,63 @@
+<?php
+// $Id: deposit_wizard.module,v 1.114 2010/09/15 03:41:58 sun Exp $
+
+/**
+ * @file
+ * Menu paths and access callbacks to embed deposit_wizard
+ * This tiny module was created to avoid using default views arguments
+ * to specify the researcher uid (ie to secure view) and to hide the menu entry
+ * for non researchers
+ *
+ * Complements 'repo_researcher' feature
+ */
+
+/**
+ * Implements hook_help().
+ */
+function deposit_wizard_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/deposit_wizard':
+      return t('Menu paths and access callbacks to embed deposit_wizard');
+
+    case 'admin/help#deposit_wizard':
+      $output = '';
+      $output .= '<p>'. t('Content creation links to deposit into the repository') .'</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+/*
+function deposit_wizard_permission() {
+	return array(
+    'access my-research' => array(
+      'title' => t('Access my-research'),
+      'description' => t("Access 'my-research' view"),
+    ),
+  );
+}
+*/
+
+
+/**
+ * Implements hook_menu().
+ */
+function deposit_wizard_menu() {
+  // Menu link callbacks.
+  $items['deposit'] = array(
+	'type' => MENU_NORMAL_ITEM,
+	'menu_name' => 'main-menu',
+	'title' => 'Deposit',
+    'page callback' => 'deposit_wizard_depositpage',
+    //'access callback' => '_deposit_wizard_access_myresearch',
+	  'access callback' => 'user_access',
+    'access arguments' => array('access my-research'),
+    'file' => 'deposit_wizard.inc',
+  );
+  return $items;
+}
+
+
+
